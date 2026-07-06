@@ -945,7 +945,7 @@ function Footer() {
         ))}
       </div>
       <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-border flex flex-wrap justify-between gap-4 text-sm text-muted-foreground">
-        <div>© 2026 EldoZone. Not affiliated with Eldorado.gg or Riot Games.</div>
+        <div>© 2026 Velora. Not affiliated with Eldorado.gg or Riot Games.</div>
       </div>
     </footer>
   );
