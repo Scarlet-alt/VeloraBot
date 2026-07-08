@@ -47,9 +47,9 @@ export function UnicornBackground({
   return (
     <div
       data-us-project={projectId}
-      data-us-dpi="1.5"
+      data-us-dpi="1"
       data-us-scale="1"
-      data-us-fps="60"
+      data-us-fps="30"
       className={className}
     />
   );

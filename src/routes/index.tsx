@@ -3,10 +3,10 @@ import {
   motion, useScroll, useTransform, useInView,
   useMotionValue, useSpring, useReducedMotion,
 } from "motion/react";
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, useMemo, type ReactNode } from "react";
 import {
   ArrowRight, Zap, Radar, MessageSquare, Terminal, LineChart, SlidersHorizontal,
-  Check, Menu, X, Star, CheckCircle2, Users, Megaphone,
+  Check, Menu, X, Star, CheckCircle2, Users, Megaphone, Sparkles,
   MousePointerClick, History, Gauge, Eye, Send, Activity,
 } from "lucide-react";
 import veloraLogo from "@/assets/velora-logo.png";
@@ -159,19 +159,17 @@ function DashShot({ src, alt, eager = false, className = "" }: { src: string; al
   );
 }
 
-/* Slim referral announcement — sits above the nav pill, whole strip is clickable */
+/* Slim launch-promo announcement — sits above the nav pill, whole strip is clickable */
 function AnnouncementBar() {
   return (
     <a
-      href={DISCORD}
-      target="_blank"
-      rel="noopener noreferrer"
+      href="#pricing"
       className="group flex h-11 items-center justify-center gap-2.5 border-b border-white/[0.06] bg-gradient-to-r from-brand/15 via-background to-[oklch(0.55_0.2_350/0.12)] px-4 text-center text-sm transition-colors hover:from-brand/25 hover:to-[oklch(0.55_0.2_350/0.2)] sm:h-12 sm:text-base"
     >
-      <Users size={16} className="hidden shrink-0 text-brand sm:inline" />
+      <Sparkles size={16} className="hidden shrink-0 text-brand sm:inline" />
       <span className="truncate">
-        <span className="font-medium">Invite a friend, both save $5 on Monthly.</span>{" "}
-        <span className="hidden text-muted-foreground sm:inline">Get your referral link in Discord.</span>
+        <span className="font-medium">🔥 First 15 clients get 25% OFF for 6 months!</span>{" "}
+        <span className="hidden text-muted-foreground sm:inline">Limited to the first 15 successful purchases only.</span>
       </span>
       <ArrowRight size={16} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
     </a>
@@ -416,17 +414,16 @@ function CategoryMarquee() {
   );
 }
 
+const ENGINE_TABS = [
+  { icon: Radar, label: "Monitor", desc: "Velora watches new requests in real time, so you do not have to keep checking manually.", image: veloraAngled, imageAlt: "Velora monitor view" },
+  { icon: MessageSquare, label: "Auto-Reply", desc: "Send your saved response instantly when a request matches your setup.", image: veloraConnect, imageAlt: "Velora reply flow" },
+  { icon: SlidersHorizontal, label: "Rules", desc: "Choose what Velora should react to with categories, keywords, and skip rules.", image: veloraDashPurple, imageAlt: "Velora rules view" },
+  { icon: Terminal, label: "Live Console", desc: "See every action as it happens, from matched requests to skipped ones.", image: veloraComposite, imageAlt: "Velora live console" },
+  { icon: LineChart, label: "Stats", desc: "Track sent replies, offers, skipped requests, failures, and monitor health from one screen.", image: veloraSidePurple, imageAlt: "Velora stats view" },
+];
+
 function EngineTabs() {
-  const tabs = [
-    { icon: Radar, label: "Monitor", desc: "Velora watches new requests in real time, so you do not have to keep checking manually.", image: veloraAngled, imageAlt: "Velora monitor view" },
-    { icon: MessageSquare, label: "Auto-Reply", desc: "Send your saved response instantly when a request matches your setup.", image: veloraConnect, imageAlt: "Velora reply flow" },
-    { icon: SlidersHorizontal, label: "Rules", desc: "Choose what Velora should react to with categories, keywords, and skip rules.", image: veloraDashPurple, imageAlt: "Velora rules view" },
-    { icon: Terminal, label: "Live Console", desc: "See every action as it happens, from matched requests to skipped ones.", image: veloraComposite, imageAlt: "Velora live console" },
-    { icon: LineChart, label: "Stats", desc: "Track sent replies, offers, skipped requests, failures, and monitor health from one screen.", image: veloraSidePurple, imageAlt: "Velora stats view" },
-  ];
   const [active, setActive] = useState(0);
-  const Icon = tabs[active].icon;
-  const activeVisual = tabs[active].image;
 
   return (
     <section id="features" className="py-24 px-4">
@@ -437,7 +434,7 @@ function EngineTabs() {
         <AnimatedH2 text="What Velora does for you." className="text-center text-5xl md:text-6xl font-bold text-gradient mb-16" />
 
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {tabs.map((t, i) => (
+          {ENGINE_TABS.map((t, i) => (
             <button
               key={t.label}
               onClick={() => setActive(i)}
@@ -450,27 +447,36 @@ function EngineTabs() {
           ))}
         </div>
 
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease }}
-          className="grid md:grid-cols-2 gap-8 items-center glass rounded-3xl p-8 md:p-12"
-        >
-          <div className="relative">
-            <DashShot src={activeVisual} alt={tabs[active].imageAlt} className="rounded-[1.7rem]" />
-            <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3 py-1.5 text-sm backdrop-blur">
-              <Icon size={15} className="text-brand" /> {tabs[active].label}
-            </div>
-          </div>
-          <div>
-            <h3 className="text-3xl font-bold mb-4">{tabs[active].label}</h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">{tabs[active].desc}</p>
-            <a href="#pricing" className="inline-flex items-center gap-2 text-brand font-medium">
-              Try it free <ArrowRight size={16} />
-            </a>
-          </div>
-        </motion.div>
+        {/* All tab panels pre-rendered; active one fades in via CSS — no remount, no image reload */}
+        <div className="relative rounded-3xl border border-[var(--border)] bg-[color-mix(in_oklab,var(--card)_60%,transparent)] p-8 md:p-12">
+          {ENGINE_TABS.map((t, i) => {
+            const Icon = t.icon;
+            const isActive = active === i;
+            return (
+              <div
+                key={t.label}
+                className={`grid md:grid-cols-2 gap-8 items-center transition-opacity duration-300 ${
+                  isActive ? "opacity-100 relative" : "opacity-0 absolute inset-0 p-8 md:p-12 pointer-events-none"
+                }`}
+                aria-hidden={!isActive}
+              >
+                <div className="relative">
+                  <DashShot src={t.image} alt={t.imageAlt} className="rounded-[1.7rem]" />
+                  <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3 py-1.5 text-sm backdrop-blur">
+                    <Icon size={15} className="text-brand" /> {t.label}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold mb-4">{t.label}</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6">{t.desc}</p>
+                  <a href="#pricing" className="inline-flex items-center gap-2 text-brand font-medium">
+                    Try it free <ArrowRight size={16} />
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -653,7 +659,7 @@ function Pricing() {
     },
     {
       name: "Monthly", price: "$25", period: "/month", plan: "monthly",
-      features: ["Everything in Weekly", "Best price per day", "Priority support", "Invite a friend: $5 off for both — you each pay $20"],
+      features: ["Everything in Weekly", "Best price per day", "Priority support", "First 15 buyers: 25% OFF for 6 months"],
       cta: "Go Monthly", highlight: true,
     },
   ];
@@ -720,22 +726,20 @@ function Pricing() {
             <div className="relative flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand/30 to-[oklch(0.55_0.2_350/0.2)] ring-1 ring-white/10">
-                  <Users size={18} className="text-foreground/90" />
+                  <Sparkles size={18} className="text-foreground/90" />
                 </div>
                 <div>
-                  <p className="font-semibold">Invite a friend, both save $5 on Monthly.</p>
+                  <p className="font-semibold">🔥 First 15 clients get 25% OFF for 6 months!</p>
                   <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-                    Your friend gets $5 off their first Monthly payment. Once their paid signup is confirmed, your reward is handled through Discord.
+                    This offer is limited to the first 15 successful purchases only. Once the spots are filled, the discount is gone — act fast!
                   </p>
                 </div>
               </div>
               <a
-                href={DISCORD}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#pricing"
                 className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
               >
-                <DiscordIcon size={15} /> Get referral link
+                <Sparkles size={15} /> Claim your spot
               </a>
             </div>
           </div>
@@ -815,7 +819,7 @@ function FAQ() {
     { q: "What happens after I pay?", a: "After a successful payment, you will immediately be redirected to your personal Velora dashboard. No waiting, no manual setup." },
     { q: "Which games are supported?", a: "Valorant and Fortnite, with every major category. More games are coming." },
     { q: "Is there a free trial?", a: "Yes — 1 hour of full access, free. Enough to watch it catch and answer real requests." },
-    { q: "How does the referral discount work?", a: "Invite a friend and you both get $5 off your next Monthly payment — $20 each, for that month. Invite another friend for another month's discount." },
+    { q: "How does the launch promo work?", a: "The first 15 clients who purchase any paid plan will receive 25% OFF for 6 months. This offer is limited to the first 15 successful purchases only — once the spots are filled, the discount is gone." },
   ];
   return (
     <section id="faq" className="py-32 px-4">
@@ -825,7 +829,7 @@ function FAQ() {
         </Reveal>
         <AnimatedH2 text="Quick answers." className="text-center text-5xl md:text-6xl font-bold text-gradient mb-16" />
         <Reveal delay={0.1}>
-          <Accordion type="single" collapsible className="glass rounded-3xl px-6">
+          <Accordion type="single" collapsible className="rounded-3xl border border-[var(--border)] bg-[color-mix(in_oklab,var(--card)_60%,transparent)] px-6">
             {items.map((it) => (
               <AccordionItem key={it.q} value={it.q}>
                 <AccordionTrigger className="text-left text-base font-medium hover:no-underline">{it.q}</AccordionTrigger>
