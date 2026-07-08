@@ -392,27 +392,6 @@ function Hero() {
   );
 }
 
-function CategoryMarquee() {
-  const cats = [
-    "Rank Boost", "Placements", "Net Wins", "Coaching", "Radiant Boost",
-    "Save the World", "Battle Pass", "Reload Rank Boost", "Custom Requests",
-  ];
-  return (
-    <section className="py-20 border-y border-border">
-      <Reveal>
-        <h3 className="text-center text-sm uppercase tracking-widest text-muted-foreground mb-10">Works with every category</h3>
-      </Reveal>
-      <div className="relative overflow-hidden mask-fade">
-        <div className="flex gap-16 animate-marquee w-max">
-          {[...cats, ...cats, ...cats].map((c, i) => (
-            <div key={i} className="text-2xl md:text-3xl font-bold text-muted-foreground/60 whitespace-nowrap">{c}</div>
-          ))}
-        </div>
-      </div>
-      <style>{`.mask-fade{mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent);}`}</style>
-    </section>
-  );
-}
 
 const ENGINE_TABS = [
   { icon: Radar, label: "Monitor", desc: "Velora watches new requests in real time, so you do not have to keep checking manually.", image: veloraAngled, imageAlt: "Velora monitor view" },
@@ -602,37 +581,6 @@ function HowItWorks() {
   );
 }
 
-function FeatureGrid() {
-  const feats = [
-    { icon: Zap, title: "Fast Mode", desc: "Cuts every delay down when you want max speed." },
-    { icon: SlidersHorizontal, title: "Auto Reply Rules", desc: "One rule per category. Flip them on and off anytime." },
-    { icon: MousePointerClick, title: "Auto-Close Pages", desc: "Velora tidies up after itself. No window clutter." },
-    { icon: History, title: "Activity Log", desc: "A history of every request it handled." },
-    { icon: Gauge, title: "Latency Control", desc: "Choose how fast replies go out — instant or more natural." },
-    { icon: Megaphone, title: "Announcements", desc: "Updates show up right on your dashboard." },
-  ];
-  return (
-    <section className="py-32 px-4">
-      <div className="max-w-7xl mx-auto">
-        <Reveal>
-          <p className="text-center text-sm uppercase tracking-widest text-brand mb-3">Toolkit</p>
-        </Reveal>
-        <AnimatedH2 text="The details are covered." className="text-center text-5xl md:text-6xl font-bold text-gradient mb-16" />
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {feats.map((f, i) => (
-            <Reveal key={f.title} delay={i * 0.05}>
-              <div className="glass rounded-2xl p-8 h-full hover:bg-accent transition-colors group">
-                <f.icon className="text-brand mb-6 group-hover:scale-110 transition-transform" size={26} strokeWidth={1.8} />
-                <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                <p className="text-muted-foreground text-sm">{f.desc}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // Whop checkout links — PUBLIC checkout URLs only.
 // SECURITY: never put Whop API keys, private tokens, or webhook secrets here — this file ships to the browser.
@@ -843,42 +791,6 @@ function FAQ() {
   );
 }
 
-function Testimonials() {
-  const items = [
-    { quote: "I kept losing orders to faster sellers. Not anymore. It paid for itself the first week.", name: "Kaze", role: "Valorant booster" },
-    { quote: "Set my templates, turned it on, went to sleep. Replies were already sent when I woke up.", name: "Drex", role: "Fortnite seller" },
-    { quote: "I like that I can watch everything it does in the console. No black box.", name: "Nyra", role: "Multi-game seller" },
-  ];
-  return (
-    <section className="py-32 px-4">
-      <div className="max-w-7xl mx-auto">
-        <Reveal>
-          <p className="text-center text-sm uppercase tracking-widest text-brand mb-3">Sellers</p>
-        </Reveal>
-        <AnimatedH2 text="What sellers say." className="text-center text-5xl md:text-6xl font-bold text-gradient mb-16" />
-        <div className="grid md:grid-cols-3 gap-4">
-          {items.map((t, i) => (
-            <Reveal key={t.name} delay={i * 0.1}>
-              <div className="glass rounded-2xl p-8 h-full flex flex-col">
-                <div className="flex gap-1 mb-4 text-brand">
-                  {Array.from({ length: 5 }).map((_, k) => <Star key={k} size={14} className="fill-current" />)}
-                </div>
-                <p className="text-lg mb-6 flex-1">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand to-[oklch(0.55_0.2_350)]" />
-                  <div>
-                    <div className="font-medium text-sm">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.role}</div>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function CTA() {
   return (
