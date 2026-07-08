@@ -711,7 +711,7 @@ function Games() {
     { name: "Valorant", cats: ["Rank Boost", "Placements", "Net Wins", "Coaching", "Radiant Boost"] },
     { name: "Fortnite", cats: ["Save the World", "Battle Pass", "Reload Rank Boost", "Custom Requests"] },
   ];
-  const soon = ["League of Legends", "Brawl Stars", "EA FC 25", "OSRS", "R6 Siege", "Rocket League"];
+  const soon = ["League of Legends", "Brawl Stars", "EA FC 26", "OSRS", "R6 Siege", "Rocket League"];
   return (
     <section id="games" className="py-32 px-4">
       <div className="max-w-7xl mx-auto">
